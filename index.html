@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSUD dr. Sobirin - Musi Rawas</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans for the modern geometric look -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            900: '#082f49', // Deep navy
+                        },
+                        danger: '#e11d48'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        /* Hide scrollbar for horizontal scrolling sections */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* Add focus ring only on keyboard navigation for clean aesthetics */
+        *:focus-visible {
+            outline: 3px solid #0ea5e9;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-900 bg-gray-50 overflow-x-hidden selection:bg-black selection:text-white pt-24 md:pt-28">
+
+    <!-- Emergency Bar (P0) - Made Smooth Fixed with JS translate -->
+    <div class="fixed top-0 left-0 right-0 bg-black text-white px-4 py-2 flex flex-col sm:flex-row justify-center sm:justify-between items-center text-xs md:text-sm font-medium z-50 transition-transform duration-300 shadow-md" id="emergency-bar">
+        <div class="flex items-center gap-2">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-danger opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-danger"></span>
+            </span>
+            <span>Gawat Darurat 24 Jam (IGD)</span>
+        </div>
+        <a href="tel:+628111234567" class="mt-1 sm:mt-0 hover:text-gray-300 transition flex items-center gap-2 rounded px-1" aria-label="Telepon IGD RSUD dr. Sobirin">
+            <i class="fa-solid fa-phone text-danger"></i> (0733) 321 118
+        </a>
+    </div>
+
+    <!-- Floating Navigation Header - Dynamic positioning on scroll -->
+    <header id="main-header" class="fixed top-12 left-0 right-0 z-40 px-4 md:px-8 transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            
+            <!-- Desktop Left Links -->
+            <nav class="hidden lg:flex items-center gap-2 bg-white/95 backdrop-blur-md px-6 py-3 rounded-full shadow-lg border border-gray-100 transition-all">
+                <a href="#layanan" class="text-sm font-semibold text-gray-600 hover:text-black transition px-2 py-1">Layanan</a>
+                <span class="text-gray-300">|</span>
+                <a href="#jadwal" class="text-sm font-semibold text-gray-600 hover:text-black transition px-2 py-1">Jadwal</a>
+                <span class="text-gray-300">|</span>
+                <a href="#bpjs" class="text-sm font-semibold text-gray-600 hover:text-black transition px-2 py-1">BPJS</a>
+            </nav>
+
+            <!-- Logo Center (Mobile & Desktop) -->
+            <a href="#" class="bg-white/95 backdrop-blur-md px-6 py-3 rounded-full shadow-lg border border-gray-100 flex items-center gap-3 transition-transform hover:scale-102">
+                <i class="fa-solid fa-sun text-primary-500 text-xl"></i>
+                <span class="font-bold tracking-tight text-lg">RSUD Sobirin</span>
+            </a>
+
+            <!-- Desktop Right Actions -->
+            <div class="hidden lg:flex items-center gap-3">
+                <div class="bg-white/95 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-gray-100 flex items-center gap-2">
+                    <i class="fa-solid fa-search text-gray-400 text-sm"></i>
+                    <input type="text" id="searchInput" placeholder="Cari dokter / spesialis..." class="bg-transparent border-none outline-none text-sm w-36 placeholder-gray-400 focus:w-56 transition-all duration-300 text-black">
+                </div>
+                <button onclick="showRegistrationModal()" class="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg transition flex items-center gap-2">
+                    Daftar Online <i class="fa-solid fa-arrow-right bg-white/20 rounded-full p-1 text-[10px]"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="lg:hidden bg-white/95 backdrop-blur-md w-12 h-12 rounded-full shadow-lg border border-gray-100 flex items-center justify-center text-black" onclick="toggleMenu()" aria-label="Menu">
+                <i class="fa-solid fa-bars text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden absolute top-full left-4 right-4 mt-2 bg-white rounded-3xl shadow-2xl p-6 border border-gray-100 flex-col gap-3 transition-all duration-300">
+            <!-- Mobile Search -->
+            <div class="bg-gray-50 px-4 py-3 rounded-2xl flex items-center gap-2 border border-gray-100">
+                <i class="fa-solid fa-search text-gray-400"></i>
+                <input type="text" id="searchInputMobile" placeholder="Cari dokter atau spesialis..." class="bg-transparent border-none outline-none text-sm w-full text-black">
+            </div>
+            <a href="#layanan" class="p-3 rounded-xl hover:bg-gray-50 font-semibold" onclick="toggleMenu()">Layanan</a>
+            <a href="#jadwal" class="p-3 rounded-xl hover:bg-gray-50 font-semibold" onclick="toggleMenu()">Jadwal Dokter</a>
+            <a href="#bpjs" class="p-3 rounded-xl hover:bg-gray-50 font-semibold" onclick="toggleMenu()">Info BPJS</a>
+            <button onclick="toggleMenu(); showRegistrationModal();" class="w-full p-4 mt-2 rounded-2xl bg-black text-white text-center font-bold shadow-lg hover:bg-gray-800 transition">
+                Daftar Online
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="p-2 md:p-4">
+        <!-- Main Image Container -->
+        <div class="relative w-full h-[75vh] min-h-[550px] rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-gray-900 shadow-2xl">
+            <!-- Medical Building Illustration -->
+            <img src="https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?q=80&w=2000&auto=format&fit=crop" alt="Gedung RSUD dr. Sobirin Muara Beliti" class="absolute inset-0 w-full h-full object-cover">
+            
+            <!-- Dark Overlay for Readability -->
+            <div class="absolute inset-0 bg-gradient-to-b from-primary-900/60 via-black/40 to-black/85"></div>
+
+            <!-- Hero Content -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4 pt-10">
+                <span class="bg-white/10 backdrop-blur-md text-white border border-white/20 px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-6 shadow-sm animate-pulse">
+                    Kini Di Muara Beliti
+                </span>
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] tracking-tight max-w-5xl">
+                    Temukan Layanan, Akses Perawatan, & <span class="text-primary-100">Fasilitas Terpercaya</span>
+                </h1>
+                <p class="mt-6 text-base md:text-lg text-gray-200 max-w-2xl font-light leading-relaxed">
+                    Akses mudah ke layanan kesehatan unggulan, informasi jadwal, dan pendaftaran online di Kabupaten Musi Rawas.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 mt-8 w-full justify-center px-4">
+                    <a href="#lokasi" class="bg-white hover:bg-gray-100 text-black px-8 py-4 rounded-full font-bold transition shadow-xl flex items-center justify-center gap-3">
+                        Temukan Lokasi Kami <i class="fa-solid fa-location-dot bg-black text-white rounded-full p-1.5 text-xs"></i>
+                    </a>
+                    <button onclick="showRegistrationModal()" class="bg-black/40 hover:bg-black/60 text-white border border-white/30 backdrop-blur-md px-8 py-4 rounded-full font-bold transition shadow-xl flex items-center justify-center gap-3">
+                        Daftar Antrean <i class="fa-solid fa-arrow-right bg-white/20 rounded-full p-1.5 text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Floating Social & Trust Badges (Desktop Only) -->
+            <div class="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 flex-col gap-3 z-20">
+                <a href="#" class="w-12 h-12 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition text-black" aria-label="Instagram"><i class="fa-brands fa-instagram text-lg"></i></a>
+                <a href="#" class="w-12 h-12 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition text-black" aria-label="Facebook"><i class="fa-brands fa-facebook-f text-lg"></i></a>
+            </div>
+
+            <!-- Trust Badge (Bottom Left) -->
+            <div class="absolute bottom-6 md:bottom-10 left-6 md:left-10 bg-white/95 backdrop-blur rounded-full p-2 pr-6 flex items-center gap-4 shadow-xl">
+                <div class="flex -space-x-3">
+                    <img class="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" alt="Pasien terlayani">
+                    <img class="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop" alt="Pasien terlayani">
+                    <img class="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" alt="Pasien terlayani">
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xs font-bold text-black leading-none">25rb+ Pasien BPJS</span>
+                    <span class="text-[10px] text-gray-500">Terlayani Tahun Ini</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Explore Options Section (Split Layout) -->
+    <section id="layanan" class="py-20 px-4 md:px-8 max-w-7xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <!-- Left Text -->
+            <div class="space-y-6">
+                <span class="border border-gray-300 px-4 py-1.5 rounded-full text-xs font-bold tracking-wide">Tentang Kami</span>
+                <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight text-black">
+                    Eksplorasi Layanan, Untuk Kesehatan Anda
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    RSUD dr. Sobirin adalah platform terpercaya yang menghubungkan pasien dengan dokter spesialis terbaik di fasilitas modern Kabupaten Musi Rawas.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <a href="#jadwal" class="inline-flex bg-black hover:bg-gray-800 text-white px-8 py-4 rounded-full font-bold transition items-center gap-3 shadow-md">
+                        Cari Dokter <i class="fa-solid fa-arrow-right bg-white/20 rounded-full p-1.5 text-xs"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Images (Masonry-style Grid) -->
+            <div class="grid grid-cols-2 gap-4 h-[500px]">
+                <div class="relative rounded-[2rem] overflow-hidden h-full transform translate-y-8 shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=800&fit=crop" class="absolute inset-0 w-full h-full object-cover" alt="Fasilitas Rawat Inap" loading="lazy">
+                    <div class="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur p-4 rounded-2xl shadow-md">
+                        <h4 class="font-bold text-sm text-black">Fasilitas Rawat Inap</h4>
+                        <p class="text-[10px] text-gray-500 mt-1">Kenyamanan dalam masa pemulihan.</p>
+                    </div>
+                </div>
+                <div class="relative rounded-[2rem] overflow-hidden h-full shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&fit=crop" class="absolute inset-0 w-full h-full object-cover" alt="Layanan IGD" loading="lazy">
+                    <div class="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur p-4 rounded-2xl shadow-md">
+                        <h4 class="font-bold text-sm text-black">IGD & Ambulans</h4>
+                        <p class="text-[10px] text-gray-500 mt-1">Layanan darurat respons cepat.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Explore Facilities (Horizontal Scroll Segment with Visual Indicator) -->
+    <section class="bg-gray-900 py-24 px-4 md:px-8 mt-10 rounded-t-[3rem] text-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+                <div>
+                    <span class="bg-gray-800 border border-gray-700 px-4 py-1.5 rounded-full text-xs font-bold tracking-wide">Fasilitas</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight mt-6">Eksplorasi Fasilitas Kami</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button onclick="scrollFacilities(-320)" class="w-12 h-12 rounded-full border border-gray-600 flex items-center justify-center hover:bg-white hover:text-black transition" aria-label="Scroll left"><i class="fa-solid fa-arrow-left"></i></button>
+                    <button onclick="scrollFacilities(320)" class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center hover:bg-gray-200 transition" aria-label="Scroll right"><i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Horizontal Scrollable Cards Container -->
+            <div id="facilities-container" class="flex gap-6 overflow-x-auto no-scrollbar pb-8 snap-x scroll-smooth">
+                <!-- Card 1 -->
+                <div class="relative shrink-0 w-[300px] h-[400px] rounded-[2rem] overflow-hidden snap-start group cursor-pointer shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&fit=crop" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700" alt="Layanan IGD 24 Jam" loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent"></div>
+                    <div class="absolute top-4 left-4 bg-white/20 backdrop-blur rounded-full px-4 py-1 text-xs font-bold">Layanan Darurat</div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <h3 class="text-xl font-bold leading-tight">IGD & Ambulans Siaga 24/7</h3>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="relative shrink-0 w-[300px] h-[400px] rounded-[2rem] overflow-hidden snap-start group cursor-pointer shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=800&fit=crop" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700" alt="Kamar Perawatan Nyaman" loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent"></div>
+                    <div class="absolute top-4 left-4 bg-white/20 backdrop-blur rounded-full px-4 py-1 text-xs font-bold">Rawat Inap</div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <h3 class="text-xl font-bold leading-tight">Kamar Perawatan Nyaman</h3>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="relative shrink-0 w-[300px] md:w-[400px] h-[400px] rounded-[2rem] overflow-hidden snap-start group cursor-pointer shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&fit=crop" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700" alt="Laboratorium RSUD dr. Sobirin" loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent"></div>
+                    <div class="absolute top-4 left-4 bg-white/20 backdrop-blur rounded-full px-4 py-1 text-xs font-bold">Penunjang Medis</div>
+                    <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+                        <h3 class="text-xl font-bold leading-tight max-w-[200px]">Laboratorium & Radiologi Canggih</h3>
+                        <div class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center shrink-0 shadow-md">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="relative shrink-0 w-[300px] h-[400px] rounded-[2rem] overflow-hidden snap-start group cursor-pointer shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&fit=crop" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700" alt="Apotek Terpadu" loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent"></div>
+                    <div class="absolute top-4 left-4 bg-white/20 backdrop-blur rounded-full px-4 py-1 text-xs font-bold">Farmasi</div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <h3 class="text-xl font-bold leading-tight">Apotek Terpadu & Terlengkap</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Infinite Scroll Progress Bar for Mobile Navigation feedback -->
+            <div class="mt-4 max-w-md mx-auto bg-gray-800 h-1.5 rounded-full overflow-hidden shadow-inner">
+                <div id="facilities-progress" class="bg-primary-500 h-full w-[25%] rounded-full transition-all duration-300"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Link CTA Section -->
+    <section id="daftar-online" class="py-24 bg-white px-4">
+        <div class="max-w-4xl mx-auto text-center space-y-8">
+            <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight text-black">Daftar Rawat Jalan Disini,<br>Perawatan Terpercaya Makin Mudah.</h2>
+            <p class="text-gray-500 text-lg leading-relaxed max-w-2xl mx-auto">Temukan dokter spesialis dan pesan jadwal konsultasi tanpa perlu antre panjang di lokasi.</p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4">
+                <button onclick="showRegistrationModal()" class="bg-black hover:bg-gray-800 text-white px-8 py-4 rounded-full font-bold transition flex items-center justify-center gap-3 shadow-xl">
+                    Mulai Pendaftaran <i class="fa-solid fa-arrow-right bg-white/20 rounded-full p-1.5 text-xs"></i>
+                </button>
+                <a href="https://play.google.com/store/apps/details?id=app.bpjs.mobile" target="_blank" class="bg-white border border-gray-200 hover:border-black text-black px-8 py-4 rounded-full font-bold transition flex items-center justify-center gap-3 shadow-md" rel="noopener">
+                    <i class="fa-brands fa-google-play"></i> Via Mobile JKN
+                </a>
+            </div>
+            
+            <!-- Insurance / Government Partners Grid -->
+            <div class="pt-16 border-t border-gray-100 flex flex-wrap justify-center items-center gap-8 md:gap-12 opacity-50 grayscale hover:grayscale-0 transition duration-350">
+                <div class="font-bold text-xl tracking-tighter text-gray-700">BPJS Kesehatan</div>
+                <div class="font-bold text-xl tracking-tighter text-gray-700">Jasa Raharja</div>
+                <div class="font-bold text-xl tracking-tighter text-gray-700">Kemenkes RI</div>
+                <div class="font-bold text-xl tracking-tighter text-gray-700">Pemkab Musi Rawas</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Doctor Schedule List with Real-time JS Filters -->
+    <section id="jadwal" class="py-20 bg-gray-50 px-4 md:px-8 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-black">Temukan Dokter Spesialis</h2>
+                <p class="text-gray-500 mt-2">Gunakan pencarian di atas atau filter spesialisasi di bawah ini.</p>
+            </div>
+
+            <!-- Filter Pills -->
+            <div class="flex gap-3 overflow-x-auto no-scrollbar pb-4 mb-8 snap-x">
+                <button onclick="filterDoctors('all')" class="filter-btn px-6 py-2.5 bg-black text-white rounded-full text-sm font-bold whitespace-nowrap transition shadow-sm snap-start">Semua Spesialis</button>
+                <button onclick="filterDoctors('penyakit-dalam')" class="filter-btn px-6 py-2.5 bg-white border border-gray-200 text-gray-600 rounded-full text-sm font-semibold whitespace-nowrap hover:border-black hover:text-black transition snap-start">Penyakit Dalam</button>
+                <button onclick="filterDoctors('anak')" class="filter-btn px-6 py-2.5 bg-white border border-gray-200 text-gray-600 rounded-full text-sm font-semibold whitespace-nowrap hover:border-black hover:text-black transition snap-start">Anak</button>
+                <button onclick="filterDoctors('kandungan')" class="filter-btn px-6 py-2.5 bg-white border border-gray-200 text-gray-600 rounded-full text-sm font-semibold whitespace-nowrap hover:border-black hover:text-black transition snap-start">Kandungan</button>
+                <button onclick="filterDoctors('syaraf')" class="filter-btn px-6 py-2.5 bg-white border border-gray-200 text-gray-600 rounded-full text-sm font-semibold whitespace-nowrap hover:border-black hover:text-black transition snap-start">Syaraf</button>
+            </div>
+
+            <!-- Doctor Directory Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="doctor-list">
+                <!-- Doctor Card 1 -->
+                <div class="doctor-card bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm flex items-center justify-between group hover:shadow-md transition duration-300 cursor-pointer" data-category="penyakit-dalam" onclick="selectDoctor('dr. Ahmad Rifai, Sp.PD', 'Poli Penyakit Dalam')">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-100 shrink-0 shadow-inner">
+                            <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=200&fit=crop" alt="dr. Ahmad Rifai, Sp.PD" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-black">dr. Ahmad Rifai, Sp.PD</h4>
+                            <p class="text-sm text-gray-500 font-medium">Poli Penyakit Dalam</p>
+                            <div class="flex flex-wrap items-center gap-2 mt-2">
+                                <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full">Tersedia</span>
+                                <span class="text-xs text-gray-400">Senin, Rabu, Jumat (08:00 - 12:00)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center group-hover:bg-black group-hover:text-white transition shrink-0 shadow-sm" aria-label="Jadwalkan konsultasi dengan dr. Ahmad Rifai">
+                        <i class="fa-solid fa-arrow-right -rotate-45"></i>
+                    </button>
+                </div>
+                
+                <!-- Doctor Card 2 -->
+                <div class="doctor-card bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm flex items-center justify-between group hover:shadow-md transition duration-300 cursor-pointer" data-category="kandungan" onclick="selectDoctor('dr. Siti Aminah, Sp.OG', 'Poli Kandungan')">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-100 shrink-0 shadow-inner">
+                            <img src="https://images.unsplash.com/photo-1594824436951-7f12bc00fa52?w=200&fit=crop" alt="dr. Siti Aminah, Sp.OG" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-black">dr. Siti Aminah, Sp.OG</h4>
+                            <p class="text-sm text-gray-500 font-medium">Poli Kandungan</p>
+                            <div class="flex flex-wrap items-center gap-2 mt-2">
+                                <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full">Tersedia</span>
+                                <span class="text-xs text-gray-400">Senin s/d Kamis (09:00 - 14:00)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center group-hover:bg-black group-hover:text-white transition shrink-0 shadow-sm" aria-label="Jadwalkan konsultasi dengan dr. Siti Aminah">
+                        <i class="fa-solid fa-arrow-right -rotate-45"></i>
+                    </button>
+                </div>
+
+                <!-- Doctor Card 3 -->
+                <div class="doctor-card bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm flex items-center justify-between group hover:shadow-md transition duration-300 cursor-pointer" data-category="anak" onclick="selectDoctor('dr. Budi Setiawan, Sp.A', 'Poli Anak')">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-100 shrink-0 shadow-inner">
+                            <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=200&fit=crop" alt="dr. Budi Setiawan, Sp.A" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-black">dr. Budi Setiawan, Sp.A</h4>
+                            <p class="text-sm text-gray-500 font-medium">Poli Anak</p>
+                            <div class="flex flex-wrap items-center gap-2 mt-2">
+                                <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full">Tersedia</span>
+                                <span class="text-xs text-gray-400">Selasa, Kamis (08:00 - 11:00)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center group-hover:bg-black group-hover:text-white transition shrink-0 shadow-sm" aria-label="Jadwalkan konsultasi dengan dr. Budi Setiawan">
+                        <i class="fa-solid fa-arrow-right -rotate-45"></i>
+                    </button>
+                </div>
+
+                <!-- Doctor Card 4 -->
+                <div class="doctor-card bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm flex items-center justify-between group hover:shadow-md transition duration-300 cursor-pointer" data-category="syaraf" onclick="selectDoctor('dr. Hartono, Sp.S', 'Poli Syaraf')">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-100 shrink-0 shadow-inner">
+                            <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=200&fit=crop" alt="dr. Hartono, Sp.S" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-black">dr. Hartono, Sp.S</h4>
+                            <p class="text-sm text-gray-500 font-medium">Poli Syaraf</p>
+                            <div class="flex flex-wrap items-center gap-2 mt-2">
+                                <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full">Tersedia</span>
+                                <span class="text-xs text-gray-400">Rabu, Jumat (10:00 - 13:00)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center group-hover:bg-black group-hover:text-white transition shrink-0 shadow-sm" aria-label="Jadwalkan konsultasi dengan dr. Hartono">
+                        <i class="fa-solid fa-arrow-right -rotate-45"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Filter Empty State -->
+            <div id="empty-state" class="hidden text-center py-16 bg-white rounded-[2rem] border border-gray-100 shadow-inner mt-6">
+                <i class="fa-solid fa-user-doctor text-5xl text-gray-300 mb-4 animate-bounce"></i>
+                <h3 class="text-xl font-bold text-gray-700">Pencarian Tidak Ditemukan</h3>
+                <p class="text-sm text-gray-500 mt-1">Silakan coba kata kunci lain atau pilih filter spesialisasi.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- BPJS Requirements & Information Segment -->
+    <section id="bpjs" class="py-16 px-4">
+        <div class="max-w-5xl mx-auto bg-primary-50 rounded-[3rem] p-8 md:p-12 relative overflow-hidden shadow-sm border border-primary-100">
+            <div class="relative z-10 md:w-2/3">
+                <span class="text-primary-500 font-bold uppercase tracking-wider text-xs">Informasi Jaminan Kesehatan</span>
+                <h2 class="text-3xl font-extrabold text-primary-900 mt-2 mb-4">Menerima Pasien BPJS & Jaminan UHC</h2>
+                <p class="text-gray-600 mb-6 leading-relaxed text-sm md:text-base">
+                    Bagi masyarakat Kabupaten Musi Rawas, bawalah dokumen persyaratan lengkap seperti KTP, Kartu Keluarga, Kartu BPJS/KIS aktif, dan Surat Rujukan Faskes Tingkat 1 untuk rawat jalan. Unit Gawat Darurat (IGD) melayani darurat medis 24 jam tanpa memerlukan rujukan.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button onclick="showMessage('Syarat lengkap telah diunduh/ditampilkan')" class="bg-black hover:bg-gray-800 text-white font-bold px-6 py-3 rounded-full text-xs shadow-md transition">Pelajari Syarat Lengkap</button>
+                    <a href="https://layanan.bpjs-kesehatan.go.id" target="_blank" class="bg-white hover:bg-gray-100 text-gray-700 font-semibold px-6 py-3 rounded-full text-xs border border-gray-200 transition text-center" rel="noopener">Cek Keaktifan BPJS</a>
+                </div>
+            </div>
+            <!-- Large Backlighting Icon -->
+            <i class="fa-solid fa-address-card absolute -right-10 -bottom-10 text-[200px] text-primary-100 opacity-40 -z-0"></i>
+        </div>
+    </section>
+
+    <!-- Integrated Location Mapping -->
+    <section id="lokasi" class="py-16 bg-white px-4 md:px-8 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6">
+                <span class="border border-gray-300 px-4 py-1.5 rounded-full text-xs font-bold tracking-wide">Peta Lokasi</span>
+                <h2 class="text-4xl font-extrabold tracking-tight text-black">Alamat Baru Muara Beliti</h2>
+                <p class="text-gray-600 leading-relaxed">
+                    Fasilitas baru RSUD dr. Sobirin kini beroperasi penuh di pusat administratif Kabupaten Musi Rawas. Akses jalan Lintas Sumatera yang sangat strategis dan ramah navigasi.
+                </p>
+                <div class="p-5 bg-gray-50 rounded-2xl border border-gray-100 flex items-start gap-4">
+                    <i class="fa-solid fa-route text-2xl text-primary-500 mt-1"></i>
+                    <div>
+                        <h4 class="font-bold text-black">Petunjuk Rute Singkat</h4>
+                        <p class="text-sm text-gray-500 mt-1">Dari arah Kota Lubuklinggau, ikuti jalan Lintas Sumatera menuju arah Muara Beliti (selatan). Lokasi berada di sebelah kanan jalan utama sebelum kompleks perkantoran Pemkab.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Embedded Map Frame -->
+            <div class="rounded-[2rem] overflow-hidden shadow-xl border border-gray-100 h-[350px] md:h-[450px] relative bg-gray-100">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15941.111881640985!2d103.023456!3d-3.321118!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e30bf321045bdfb%3A0xe54ef5f6b215a77f!2sMuara%20Beliti%20Barat%2C%20Kec.%20Muara%20Beliti%2C%20Kabupaten%20Musi%20Rawas%2C%20Sumatera%20Selatan!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid" class="w-full h-full border-0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Multi-step Interactive Registration Modal -->
+    <div id="registrationModal" class="fixed inset-0 z-[100] bg-black/40 hidden items-center justify-center p-4 backdrop-blur-sm transition-all duration-300">
+        <div class="bg-white rounded-[2rem] shadow-2xl max-w-lg w-full overflow-hidden transform transition-all duration-300 scale-95" id="modal-container">
+            <!-- Modal Header -->
+            <div class="p-6 flex justify-between items-center border-b border-gray-100 bg-gray-50">
+                <div>
+                    <h3 class="font-bold text-xl tracking-tight text-black">Formulir Pendaftaran Online</h3>
+                    <p class="text-xs text-gray-500 mt-0.5">Booking kunjungan berobat secara mandiri</p>
+                </div>
+                <button onclick="closeRegistrationModal()" class="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center text-black" aria-label="Tutup">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Step 1: Selection Menu -->
+            <div id="step-1" class="p-6 space-y-4">
+                <h4 class="font-bold text-sm text-gray-500 uppercase tracking-wider mb-2">Pilih Jalur Pendaftaran</h4>
+                <button onclick="goToFormStep()" class="w-full text-left p-5 border border-gray-200 rounded-2xl hover:border-black transition-all group flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mr-4 group-hover:bg-black group-hover:text-white transition-all">
+                            <i class="fa-solid fa-file-invoice text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-black">Registrasi Mandiri Baru</h4>
+                            <p class="text-xs text-gray-500">Isi data medis untuk pemesanan antrean</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-black transition-all"></i>
+                </button>
+
+                <a href="https://play.google.com/store/apps/details?id=app.bpjs.mobile" target="_blank" class="block text-left p-5 border border-gray-200 rounded-2xl hover:border-black transition-all group flex items-center justify-between" rel="noopener">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-green-50 text-green-600 rounded-full flex items-center justify-center mr-4 group-hover:bg-green-600 group-hover:text-white transition-all">
+                            <i class="fa-solid fa-mobile-screen text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-black">Gunakan Aplikasi Mobile JKN</h4>
+                            <p class="text-xs text-gray-500">Khusus bagi para peserta BPJS Kesehatan</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-black transition-all"></i>
+                </a>
+            </div>
+
+            <!-- Step 2: Form Input -->
+            <form id="step-2" class="p-6 space-y-4 hidden" onsubmit="submitBooking(event)">
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-gray-600 block">Nama Lengkap Pasien</label>
+                    <input type="text" id="reg-name" required placeholder="Contoh: San April" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black text-black text-sm">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-gray-600 block">Nomor KTP / NIK</label>
+                    <input type="text" id="reg-nik" required placeholder="16 digit NIK" pattern="[0-9]{16}" title="Masukkan 16 digit angka" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black text-black text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-gray-600 block">Dokter Tujuan</label>
+                        <select id="reg-doctor" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black text-black text-sm">
+                            <option value="dr. Ahmad Rifai, Sp.PD (Poli Penyakit Dalam)">dr. Ahmad Rifai, Sp.PD (Penyakit Dalam)</option>
+                            <option value="dr. Siti Aminah, Sp.OG (Poli Kandungan)">dr. Siti Aminah, Sp.OG (Kandungan)</option>
+                            <option value="dr. Budi Setiawan, Sp.A (Poli Anak)">dr. Budi Setiawan, Sp.A (Anak)</option>
+                            <option value="dr. Hartono, Sp.S (Poli Syaraf)">dr. Hartono, Sp.S (Syaraf)</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-gray-600 block">Tanggal Kunjungan</label>
+                        <input type="date" id="reg-date" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black text-black text-sm">
+                    </div>
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="goToStep1()" class="w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 rounded-xl text-sm transition">Kembali</button>
+                    <button type="submit" class="w-2/3 bg-black hover:bg-gray-800 text-white font-bold py-3 rounded-xl text-sm transition">Daftar Antrean</button>
+                </div>
+            </form>
+
+            <!-- Step 3: Confirmation Ticket -->
+            <div id="step-3" class="p-6 text-center space-y-6 hidden">
+                <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-3xl animate-bounce">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <div class="space-y-2">
+                    <h4 class="text-xl font-bold text-black">Pendaftaran Berhasil!</h4>
+                    <p class="text-sm text-gray-500">Silakan simpan struk pendaftaran digital berikut.</p>
+                </div>
+                <!-- Mini Ticket representation -->
+                <div class="bg-gray-50 border border-dashed border-gray-300 rounded-2xl p-5 text-left text-sm space-y-2 relative">
+                    <div class="flex justify-between border-b border-gray-200 pb-2 mb-2">
+                        <span class="font-bold text-primary-500">NOMOR ANTREAN:</span>
+                        <span class="font-extrabold text-black" id="ticket-queue">A-024</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Pasien:</span>
+                        <span class="font-semibold text-black" id="ticket-name">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Dokter:</span>
+                        <span class="font-semibold text-black" id="ticket-doctor">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Tanggal:</span>
+                        <span class="font-semibold text-black" id="ticket-date">-</span>
+                    </div>
+                </div>
+                <button onclick="closeRegistrationModal()" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3.5 rounded-xl text-sm transition">Selesai & Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Global Message Box -->
+    <div id="messageBox" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[110] bg-black text-white rounded-full shadow-2xl px-6 py-3 flex items-center gap-3 transform transition-all duration-300 translate-y-24 opacity-0 hidden">
+        <i class="fa-solid fa-circle-info text-primary-400"></i>
+        <p id="messageBoxText" class="text-sm font-medium whitespace-nowrap"></p>
+    </div>
+
+    <!-- Professional Authority Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8 px-4 md:px-8 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <!-- Brand & Info Column -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-sun text-primary-500 text-xl"></i>
+                        </div>
+                        <span class="font-bold tracking-tight text-xl">RSUD dr. Sobirin</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Memberikan pelayanan kesehatan paripurna, bermutu, dan terjangkau bagi masyarakat Kabupaten Musi Rawas di fasilitas modern Muara Beliti.
+                    </p>
+                    <div class="inline-block border border-gray-700 bg-gray-800 rounded-lg px-3 py-1.5 mt-4">
+                        <span class="text-xs font-semibold text-green-400"><i class="fa-solid fa-check-circle mr-1"></i> Akreditasi Paripurna</span>
+                    </div>
+                </div>
+
+                <!-- Quick Navigation -->
+                <div>
+                    <h4 class="font-bold text-lg mb-6 border-b border-gray-700 pb-2 inline-block">Tautan Cepat</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="#layanan" class="hover:text-white transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-[10px]"></i> Layanan & Fasilitas</a></li>
+                        <li><a href="#jadwal" class="hover:text-white transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-[10px]"></i> Jadwal Dokter</a></li>
+                        <li><a href="#bpjs" class="hover:text-white transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-[10px]"></i> Panduan Pasien BPJS</a></li>
+                        <li><a href="#daftar-online" class="hover:text-white transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-[10px]"></i> Pendaftaran Online</a></li>
+                    </ul>
+                </div>
+
+                <!-- Address & Location info -->
+                <div>
+                    <h4 class="font-bold text-lg mb-6 border-b border-gray-700 pb-2 inline-block">Kontak & Lokasi</h4>
+                    <ul class="space-y-4 text-sm text-gray-400">
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-location-dot mt-1 text-primary-400"></i>
+                            <span>Jl. Lintas Sumatera, Kec. Muara Beliti,<br>Kabupaten Musi Rawas,<br>Sumatera Selatan 31661</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-phone text-primary-400"></i>
+                            <a href="tel:+62733321118" class="hover:text-white transition">(0733) 321 118</a>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-envelope text-primary-400"></i>
+                            <a href="mailto:info@rsudsobirin.go.id" class="hover:text-white transition">info@rsudsobirin.go.id</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Emergency Contact Block -->
+                <div>
+                    <h4 class="font-bold text-lg mb-6 border-b border-gray-700 pb-2 inline-block">Layanan Darurat</h4>
+                    <div class="bg-gray-800 rounded-xl p-4 border border-gray-700 space-y-3">
+                        <div class="flex items-center gap-3 text-white">
+                            <div class="w-10 h-10 bg-danger/20 text-danger rounded-full flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-truck-medical"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-sm">IGD 24 Jam</h5>
+                                <a href="tel:+628111234567" class="text-lg font-extrabold text-danger hover:text-red-400 transition">0811-1234-567</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <h5 class="text-sm font-bold text-white mb-2">Jam Operasional Poliklinik:</h5>
+                        <ul class="text-sm text-gray-400 space-y-1">
+                            <li class="flex justify-between"><span>Senin - Kamis:</span> <span>08:00 - 14:00</span></li>
+                            <li class="flex justify-between"><span>Jumat:</span> <span>08:00 - 11:30</span></li>
+                            <li class="flex justify-between text-danger font-medium mt-1"><span>Minggu / Libur:</span> <span>Tutup</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Credits -->
+            <div class="w-full flex flex-col md:flex-row justify-between items-center pt-8 border-t border-gray-800 text-xs text-gray-500 gap-4">
+                <p>&copy; 2026 RSUD dr. Sobirin. Hak Cipta Dilindungi.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-white transition">Kebijakan Privasi</a>
+                    <a href="#" class="hover:text-white transition">Syarat & Ketentuan</a>
+                </div>
+                <div class="flex gap-4 text-lg">
+                    <a href="#" class="hover:text-white transition" aria-label="Facebook Link"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" class="hover:text-white transition" aria-label="Instagram Link"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="hover:text-white transition" aria-label="Youtube Link"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Comprehensive Page Interactions script -->
+    <script>
+        // Set minimum booking date to today
+        const dateInput = document.getElementById('reg-date');
+        if (dateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+        }
+
+        // Adaptive Header scroll velocity tracker
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            const emergencyBar = document.getElementById('emergency-bar');
+            const currentScrollY = window.scrollY;
+
+            if (currentScrollY > 100) {
+                // If scrolling down - compress and stick layout to top 
+                emergencyBar.style.transform = 'translateY(-100%)';
+                header.style.top = '10px';
+            } else {
+                // At top - return to original layout
+                emergencyBar.style.transform = 'translateY(0)';
+                header.style.top = '48px'; 
+            }
+            lastScrollY = currentScrollY;
+        });
+
+        // Real-Time search filtering for Doctor cards
+        function performSearch(query) {
+            const normalizedQuery = query.toLowerCase().trim();
+            const cards = document.querySelectorAll('.doctor-card');
+            const emptyState = document.getElementById('empty-state');
+            let matchedCount = 0;
+
+            cards.forEach(card => {
+                const doctorName = card.querySelector('h4').textContent.toLowerCase();
+                const specName = card.querySelector('p').textContent.toLowerCase();
+
+                if (doctorName.includes(normalizedQuery) || specName.includes(normalizedQuery)) {
+                    card.style.display = 'flex';
+                    matchedCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (matchedCount === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            performSearch(e.target.value);
+        });
+
+        document.getElementById('searchInputMobile').addEventListener('input', (e) => {
+            performSearch(e.target.value);
+        });
+
+        // Dynamic horizontal scroll progress tracker for facilities
+        const facilitiesContainer = document.getElementById('facilities-container');
+        const facilitiesProgress = document.getElementById('facilities-progress');
+
+        facilitiesContainer.addEventListener('scroll', () => {
+            const maxScroll = facilitiesContainer.scrollWidth - facilitiesContainer.clientWidth;
+            if (maxScroll <= 0) return;
+            const scrollPercentage = (facilitiesContainer.scrollLeft / maxScroll) * 100;
+            // Bound inside minimum track visual size for UI consistency
+            facilitiesProgress.style.width = `${Math.max(15, scrollPercentage)}%`;
+        });
+
+        function scrollFacilities(amount) {
+            facilitiesContainer.scrollBy({
+                left: amount,
+                behavior: 'smooth'
+            });
+        }
+
+        // Doctor specialty tab filter
+        function filterDoctors(category) {
+            const cards = document.querySelectorAll('.doctor-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+            const emptyState = document.getElementById('empty-state');
+            let visibleCount = 0;
+
+            buttons.forEach(btn => {
+                if (btn.getAttribute('onclick').includes(category)) {
+                    btn.classList.add('bg-black', 'text-white');
+                    btn.classList.remove('bg-white', 'text-gray-600', 'border-gray-200');
+                } else {
+                    btn.classList.remove('bg-black', 'text-white');
+                    btn.classList.add('bg-white', 'text-gray-600', 'border-gray-200');
+                }
+            });
+
+            cards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+                if (category === 'all' || cardCategory === category) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (visibleCount === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+        }
+
+        // Navigation Menu Drawer Logic
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+            } else {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex');
+            }
+        }
+
+        // Interactive modal multi-step controller
+        const modal = document.getElementById('registrationModal');
+        const modalContainer = document.getElementById('modal-container');
+        const step1 = document.getElementById('step-1');
+        const step2 = document.getElementById('step-2');
+        const step3 = document.getElementById('step-3');
+
+        function showRegistrationModal() {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            goToStep1();
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+                modalContainer.classList.remove('scale-95');
+                modalContainer.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeRegistrationModal() {
+            modalContainer.classList.add('scale-95');
+            modalContainer.classList.remove('scale-100');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = 'auto';
+            }, 150);
+        }
+
+        function goToStep1() {
+            step1.classList.remove('hidden');
+            step2.classList.add('hidden');
+            step3.classList.add('hidden');
+        }
+
+        function goToFormStep() {
+            step1.classList.add('hidden');
+            step2.classList.remove('hidden');
+            step3.classList.add('hidden');
+        }
+
+        function selectDoctor(doctorName, specialty) {
+            showRegistrationModal();
+            goToFormStep();
+            // Autofill Doctor selector
+            const select = document.getElementById('reg-doctor');
+            for (let i = 0; i < select.options.length; i++) {
+                if (select.options[i].value.includes(doctorName)) {
+                    select.selectedIndex = i;
+                    break;
+                }
+            }
+        }
+
+        function submitBooking(e) {
+            e.preventDefault();
+            
+            // Collect Form Inputs
+            const name = document.getElementById('reg-name').value;
+            const doctor = document.getElementById('reg-doctor').value;
+            const rawDate = document.getElementById('reg-date').value;
+            
+            // Simple date parsing to clean Indonesian format
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = new Date(rawDate).toLocaleDateString('id-ID', options);
+
+            // Generate ticket contents
+            document.getElementById('ticket-name').textContent = name;
+            document.getElementById('ticket-doctor').textContent = doctor;
+            document.getElementById('ticket-date').textContent = formattedDate;
+
+            // Simulated dynamic ticket sequence numbering
+            const randomQueueNum = Math.floor(Math.random() * 80) + 1;
+            document.getElementById('ticket-queue').textContent = `B-${String(randomQueueNum).padStart(3, '0')}`;
+
+            // Jump to step 3
+            step2.classList.add('hidden');
+            step3.classList.remove('hidden');
+        }
+
+        // Background click to close modal helper
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeRegistrationModal();
+            }
+        });
+
+        // Global message helper
+        const messageBox = document.getElementById('messageBox');
+        const messageBoxText = document.getElementById('messageBoxText');
+        let messageTimeout;
+
+        function showMessage(text) {
+            messageBoxText.textContent = text;
+            messageBox.classList.remove('hidden');
+            
+            setTimeout(() => {
+                messageBox.classList.remove('translate-y-24', 'opacity-0');
+            }, 10);
+
+            clearTimeout(messageTimeout);
+            messageTimeout = setTimeout(hideMessage, 3000);
+        }
+
+        function hideMessage() {
+            messageBox.classList.add('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                if (messageBox.classList.contains('opacity-0')) {
+                   messageBox.classList.add('hidden');
+                }
+            }, 300);
+        }
+    </script>
+</body>
+</html>
